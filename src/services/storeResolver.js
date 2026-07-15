@@ -1,5 +1,5 @@
-import api from './api';
-import { API_ENDPOINTS } from '../constants/api';
+import api from "./api";
+import { API_ENDPOINTS } from "../constants/api";
 
 class StoreResolver {
   /**
@@ -14,7 +14,7 @@ class StoreResolver {
       const store = stores.find((s) => s.slug === slug);
       return store || null;
     } catch (err) {
-      console.error('Failed to resolve store by slug:', err);
+      console.error("Failed to resolve store by slug:", err);
       throw err;
     }
   }

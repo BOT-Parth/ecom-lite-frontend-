@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import CategoryForm from './CategoryForm';
-import api from '../../services/api';
-import { API_ENDPOINTS } from '../../constants/api';
-import { useToast } from '../../hooks/useToast';
+import { useState } from "react";
+import CategoryForm from "../CategoryForm/CategoryForm";
+import api from "../../../services/api";
+import { API_ENDPOINTS } from "../../../constants/api";
+import { useToast } from "../../../hooks/useToast";
 
 const CategoryManager = ({ storeId, categories, onRefresh }) => {
   const { showToast } = useToast();
@@ -17,20 +17,23 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
     try {
       if (editingCategory) {
         // Edit category
-        await api.patch(API_ENDPOINTS.CATEGORIES.DETAIL(storeId, editingCategory.id), {
-          name: formData.name,
-        });
-        showToast('Category updated successfully', 'success');
+        await api.patch(
+          API_ENDPOINTS.CATEGORIES.DETAIL(storeId, editingCategory.id),
+          {
+            name: formData.name,
+          },
+        );
+        showToast("Category updated successfully", "success");
       } else {
         // Create category
         await api.post(API_ENDPOINTS.CATEGORIES.LIST_CREATE(storeId), formData);
-        showToast('Category created successfully', 'success');
+        showToast("Category created successfully", "success");
       }
       setIsFormOpen(false);
       setEditingCategory(null);
       onRefresh();
     } catch (err) {
-      showToast(err.message || 'Failed to save category', 'error');
+      showToast(err.message || "Failed to save category", "error");
     } finally {
       setLoading(false);
     }
@@ -40,11 +43,14 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
     setDeletingId(id);
     try {
       await api.delete(API_ENDPOINTS.CATEGORIES.DETAIL(storeId, id));
-      showToast('Category deleted successfully. Referencing products are now uncategorized.', 'success');
+      showToast(
+        "Category deleted successfully. Referencing products are now uncategorized.",
+        "success",
+      );
       setShowConfirmDelete(null);
       onRefresh();
     } catch (err) {
-      showToast(err.message || 'Failed to delete category', 'error');
+      showToast(err.message || "Failed to delete category", "error");
     } finally {
       setDeletingId(null);
     }
@@ -54,8 +60,12 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-white tracking-tight">Category Catalog</h2>
-          <p className="text-xs text-zinc-400 mt-1">Organize products inside custom store categories</p>
+          <h2 className="text-lg font-bold text-white tracking-tight">
+            Category Catalog
+          </h2>
+          <p className="text-xs text-zinc-400 mt-1">
+            Organize products inside custom store categories
+          </p>
         </div>
         <button
           onClick={() => {
@@ -73,7 +83,7 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-150">
           <div className="w-full max-w-md glass-panel p-6 rounded-2xl border border-zinc-800 shadow-2xl animate-in zoom-in-95 duration-200">
             <h3 className="text-base font-bold text-white mb-4 border-b border-zinc-900 pb-2">
-              {editingCategory ? 'Edit Category' : 'Create New Category'}
+              {editingCategory ? "Edit Category" : "Create New Category"}
             </h3>
             <CategoryForm
               initialData={editingCategory}
@@ -91,8 +101,12 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
       {/* Categories List Table */}
       {categories.length === 0 ? (
         <div className="text-center py-12 glass-panel rounded-2xl border border-zinc-850 p-6">
-          <h3 className="text-sm font-semibold text-zinc-300">No categories created yet</h3>
-          <p className="mt-1 text-xs text-zinc-500">Categories help organize catalog products in storefront directories.</p>
+          <h3 className="text-sm font-semibold text-zinc-300">
+            No categories created yet
+          </h3>
+          <p className="mt-1 text-xs text-zinc-500">
+            Categories help organize catalog products in storefront directories.
+          </p>
         </div>
       ) : (
         <div className="glass-panel rounded-2xl border border-zinc-850 overflow-hidden shadow-lg">
@@ -106,9 +120,16 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
             </thead>
             <tbody className="divide-y divide-zinc-900 text-zinc-300 font-medium">
               {categories.map((cat) => (
-                <tr key={cat.id} className="hover:bg-zinc-900/10 transition-smooth">
-                  <td className="px-6 py-4 font-semibold text-white">{cat.name}</td>
-                  <td className="px-6 py-4 text-zinc-400 font-mono">/{cat.slug}</td>
+                <tr
+                  key={cat.id}
+                  className="hover:bg-zinc-900/10 transition-smooth"
+                >
+                  <td className="px-6 py-4 font-semibold text-white">
+                    {cat.name}
+                  </td>
+                  <td className="px-6 py-4 text-zinc-400 font-mono">
+                    /{cat.slug}
+                  </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-3">
                       <button
@@ -139,9 +160,13 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
       {showConfirmDelete && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm">
           <div className="w-full max-w-sm glass-panel p-6 rounded-2xl border border-zinc-850 shadow-2xl text-center">
-            <h4 className="text-base font-bold text-white mb-2">Delete Category?</h4>
+            <h4 className="text-base font-bold text-white mb-2">
+              Delete Category?
+            </h4>
             <p className="text-xs text-zinc-400 leading-relaxed mb-6">
-              Are you sure? Products linked to this category will **NOT** be deleted, but their category fields will be set to **NULL** (uncategorized).
+              Are you sure? Products linked to this category will **NOT** be
+              deleted, but their category fields will be set to **NULL**
+              (uncategorized).
             </p>
             <div className="flex justify-end gap-3">
               <button
@@ -157,7 +182,9 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
                 onClick={() => handleDelete(showConfirmDelete)}
                 className="px-4 py-2 text-xs font-semibold bg-rose-600 hover:bg-rose-500 disabled:bg-rose-800 disabled:cursor-not-allowed text-white rounded-xl shadow-lg transition-smooth cursor-pointer"
               >
-                {deletingId === showConfirmDelete ? 'Deleting...' : 'Delete Category'}
+                {deletingId === showConfirmDelete
+                  ? "Deleting..."
+                  : "Delete Category"}
               </button>
             </div>
           </div>

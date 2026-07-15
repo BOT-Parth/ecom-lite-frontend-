@@ -1,16 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
-import api from '../services/api';
-import { API_ENDPOINTS } from '../constants/api';
-import { AuthContext } from '../hooks/useAuth';
+import { useState, useEffect, useCallback } from "react";
+import api from "../services/api";
+import { API_ENDPOINTS } from "../constants/api";
+import { AuthContext } from "../hooks/useAuth";
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token'));
+  const [token, setToken] = useState(localStorage.getItem("token"));
   const [userStores, setUserStores] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const logout = useCallback(() => {
-    localStorage.removeItem('token');
+    localStorage.removeItem("token");
     setToken(null);
     setUser(null);
     setUserStores([]);
@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }) => {
           setLoading(false);
         }
       } catch (err) {
-        console.error('Failed to load user profile or stores:', err);
+        console.error("Failed to load user profile or stores:", err);
         if (!cancelled) {
           logout();
         }
@@ -52,10 +52,13 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setLoading(true);
     try {
-      const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, { email, password });
+      const response = await api.post(API_ENDPOINTS.AUTH.LOGIN, {
+        email,
+        password,
+      });
       const { token: userToken, user: userData } = response.data;
 
-      localStorage.setItem('token', userToken);
+      localStorage.setItem("token", userToken);
       setToken(userToken);
       setUser(userData);
 
@@ -87,7 +90,7 @@ export const AuthProvider = ({ children }) => {
         const storesRes = await api.get(API_ENDPOINTS.STORES.MY_LIST);
         setUserStores(storesRes.data?.stores || []);
       } catch (err) {
-        console.error('Failed to refresh profile:', err);
+        console.error("Failed to refresh profile:", err);
       }
     }
   }, [token]);

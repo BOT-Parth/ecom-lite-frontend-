@@ -1,6 +1,6 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useToast } from '../hooks/useToast';
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
+import { useToast } from "../../hooks/useToast";
 
 const Navbar = () => {
   const { user, userStores, logout } = useAuth();
@@ -10,8 +10,8 @@ const Navbar = () => {
 
   const handleLogout = () => {
     logout();
-    showToast('Logged out successfully', 'success');
-    navigate('/login');
+    showToast("Logged out successfully", "success");
+    navigate("/login");
   };
 
   const isActive = (path) => location.pathname === path;
@@ -32,7 +32,9 @@ const Navbar = () => {
               <Link
                 to="/"
                 className={`text-sm font-medium transition-smooth ${
-                  isActive('/') ? 'text-purple-400' : 'text-zinc-400 hover:text-zinc-200'
+                  isActive("/")
+                    ? "text-purple-400"
+                    : "text-zinc-400 hover:text-zinc-200"
                 }`}
               >
                 Browse Stores
@@ -42,7 +44,9 @@ const Navbar = () => {
                   <Link
                     to="/profile"
                     className={`text-sm font-medium transition-smooth ${
-                      isActive('/profile') ? 'text-purple-400' : 'text-zinc-400 hover:text-zinc-200'
+                      isActive("/profile")
+                        ? "text-purple-400"
+                        : "text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
                     My Dashboard
@@ -50,7 +54,9 @@ const Navbar = () => {
                   <Link
                     to="/admin/requests"
                     className={`text-sm font-medium transition-smooth ${
-                      isActive('/admin/requests') ? 'text-purple-400' : 'text-zinc-400 hover:text-zinc-200'
+                      isActive("/admin/requests")
+                        ? "text-purple-400"
+                        : "text-zinc-400 hover:text-zinc-200"
                     }`}
                   >
                     Platform Admin
@@ -69,8 +75,18 @@ const Navbar = () => {
                   <div className="relative group">
                     <button className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-zinc-800 hover:bg-zinc-700/80 text-zinc-300 border border-zinc-700/50 transition-smooth flex items-center gap-1 cursor-pointer">
                       Manage Store
-                      <svg className="w-3 h-3 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                      <svg
+                        className="w-3 h-3 opacity-60"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M19 9l-7 7-7-7"
+                        />
                       </svg>
                     </button>
                     <div className="absolute right-0 mt-2 w-48 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl opacity-0 scale-95 pointer-events-none group-hover:opacity-100 group-hover:scale-100 group-hover:pointer-events-auto transition-all duration-150 origin-top-right py-1">
@@ -92,8 +108,12 @@ const Navbar = () => {
 
                 {/* Profile Link */}
                 <div className="hidden sm:flex flex-col text-right">
-                  <span className="text-xs font-semibold text-zinc-200">{user.username}</span>
-                  <span className="text-[10px] text-zinc-400 leading-none">{user.email}</span>
+                  <span className="text-xs font-semibold text-zinc-200">
+                    {user.username}
+                  </span>
+                  <span className="text-[10px] text-zinc-400 leading-none">
+                    {user.email}
+                  </span>
                 </div>
 
                 {/* Logout Button */}

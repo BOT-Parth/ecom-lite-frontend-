@@ -1,8 +1,8 @@
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, Link } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
-import { useToast } from '../hooks/useToast';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
+import { useToast } from "../hooks/useToast";
 
 const Register = () => {
   const { register: registerUser } = useAuth();
@@ -20,10 +20,10 @@ const Register = () => {
     setLoading(true);
     try {
       await registerUser(data.email, data.username, data.password);
-      showToast('Registration successful! Please login.', 'success');
-      navigate('/login');
+      showToast("Registration successful! Please login.", "success");
+      navigate("/login");
     } catch (err) {
-      showToast(err.message || 'Registration failed. Try again.', 'error');
+      showToast(err.message || "Registration failed. Try again.", "error");
     } finally {
       setLoading(false);
     }
@@ -46,24 +46,28 @@ const Register = () => {
             </label>
             <input
               type="text"
-              {...register('username', {
-                required: 'Username is required',
+              {...register("username", {
+                required: "Username is required",
                 minLength: {
                   value: 3,
-                  message: 'Username must be at least 3 characters',
+                  message: "Username must be at least 3 characters",
                 },
                 maxLength: {
                   value: 30,
-                  message: 'Username cannot exceed 30 characters',
+                  message: "Username cannot exceed 30 characters",
                 },
               })}
               className={`w-full px-4 py-3 rounded-xl bg-zinc-900 border text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-smooth ${
-                errors.username ? 'border-rose-500/60 focus:ring-rose-500/50' : 'border-zinc-800 focus:border-purple-500'
+                errors.username
+                  ? "border-rose-500/60 focus:ring-rose-500/50"
+                  : "border-zinc-800 focus:border-purple-500"
               }`}
               placeholder="e.g. johndoe"
             />
             {errors.username && (
-              <span className="text-xs text-rose-400 mt-1 block">{errors.username.message}</span>
+              <span className="text-xs text-rose-400 mt-1 block">
+                {errors.username.message}
+              </span>
             )}
           </div>
 
@@ -73,20 +77,24 @@ const Register = () => {
             </label>
             <input
               type="email"
-              {...register('email', {
-                required: 'Email is required',
+              {...register("email", {
+                required: "Email is required",
                 pattern: {
                   value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                  message: 'Invalid email address',
+                  message: "Invalid email address",
                 },
               })}
               className={`w-full px-4 py-3 rounded-xl bg-zinc-900 border text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-smooth ${
-                errors.email ? 'border-rose-500/60 focus:ring-rose-500/50' : 'border-zinc-800 focus:border-purple-500'
+                errors.email
+                  ? "border-rose-500/60 focus:ring-rose-500/50"
+                  : "border-zinc-800 focus:border-purple-500"
               }`}
               placeholder="you@example.com"
             />
             {errors.email && (
-              <span className="text-xs text-rose-400 mt-1 block">{errors.email.message}</span>
+              <span className="text-xs text-rose-400 mt-1 block">
+                {errors.email.message}
+              </span>
             )}
           </div>
 
@@ -96,20 +104,24 @@ const Register = () => {
             </label>
             <input
               type="password"
-              {...register('password', {
-                required: 'Password is required',
+              {...register("password", {
+                required: "Password is required",
                 minLength: {
                   value: 6,
-                  message: 'Password must be at least 6 characters',
+                  message: "Password must be at least 6 characters",
                 },
               })}
               className={`w-full px-4 py-3 rounded-xl bg-zinc-900 border text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-smooth ${
-                errors.password ? 'border-rose-500/60 focus:ring-rose-500/50' : 'border-zinc-800 focus:border-purple-500'
+                errors.password
+                  ? "border-rose-500/60 focus:ring-rose-500/50"
+                  : "border-zinc-800 focus:border-purple-500"
               }`}
               placeholder="••••••••"
             />
             {errors.password && (
-              <span className="text-xs text-rose-400 mt-1 block">{errors.password.message}</span>
+              <span className="text-xs text-rose-400 mt-1 block">
+                {errors.password.message}
+              </span>
             )}
           </div>
 
@@ -131,8 +143,11 @@ const Register = () => {
 
         <div className="mt-8 text-center border-t border-zinc-900 pt-6">
           <p className="text-xs text-zinc-400">
-            Already have an account?{' '}
-            <Link to="/login" className="font-semibold text-purple-400 hover:text-purple-300 transition-smooth">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-purple-400 hover:text-purple-300 transition-smooth"
+            >
               Sign In
             </Link>
           </p>

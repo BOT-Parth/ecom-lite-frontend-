@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import api from '../services/api';
-import { API_ENDPOINTS } from '../constants/api';
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import api from "../services/api";
+import { API_ENDPOINTS } from "../constants/api";
 
 const Home = () => {
   const [stores, setStores] = useState([]);
@@ -14,7 +14,7 @@ const Home = () => {
         const res = await api.get(API_ENDPOINTS.STORES.PUBLIC_LIST);
         setStores(res.data?.stores || []);
       } catch (err) {
-        setError(err.message || 'Failed to retrieve public stores directory');
+        setError(err.message || "Failed to retrieve public stores directory");
       } finally {
         setLoading(false);
       }
@@ -37,13 +37,14 @@ const Home = () => {
       <div className="relative text-center py-16 px-4 overflow-hidden rounded-3xl bg-gradient-to-b from-purple-900/10 via-zinc-950 to-zinc-950 border border-zinc-800/40">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_50%)]"></div>
         <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white">
-          E-Com Lite{' '}
+          E-Com Lite{" "}
           <span className="bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">
             Marketplace
           </span>
         </h1>
         <p className="mt-4 text-base md:text-lg text-zinc-400 max-w-2xl mx-auto leading-relaxed">
-          Discover curated niche storefronts, manage catalogs seamlessly, and explore our multi-tenant merchant ecosystem.
+          Discover curated niche storefronts, manage catalogs seamlessly, and
+          explore our multi-tenant merchant ecosystem.
         </p>
       </div>
 
@@ -51,11 +52,15 @@ const Home = () => {
       <div className="space-y-6">
         <div className="flex items-center justify-between border-b border-zinc-800 pb-4">
           <div>
-            <h2 className="text-xl font-bold text-white tracking-tight">Public Directory</h2>
-            <p className="text-xs text-zinc-400 mt-1">Browse all open and approved merchant stores</p>
+            <h2 className="text-xl font-bold text-white tracking-tight">
+              Public Directory
+            </h2>
+            <p className="text-xs text-zinc-400 mt-1">
+              Browse all open and approved merchant stores
+            </p>
           </div>
           <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-950/40 text-purple-300 border border-purple-800/40">
-            {stores.length} {stores.length === 1 ? 'Store' : 'Stores'} Active
+            {stores.length} {stores.length === 1 ? "Store" : "Stores"} Active
           </span>
         </div>
 
@@ -80,9 +85,12 @@ const Home = () => {
                 d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
               />
             </svg>
-            <h3 className="mt-4 text-sm font-semibold text-zinc-200">No stores found</h3>
+            <h3 className="mt-4 text-sm font-semibold text-zinc-200">
+              No stores found
+            </h3>
             <p className="mt-2 text-xs text-zinc-400 max-w-sm mx-auto">
-              There are currently no open stores in the directory. Request a new store from your dashboard!
+              There are currently no open stores in the directory. Request a new
+              store from your dashboard!
             </p>
             <div className="mt-6">
               <Link
@@ -104,7 +112,12 @@ const Home = () => {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <span className="p-2 rounded-xl bg-purple-950/50 text-purple-400 group-hover:bg-purple-500 group-hover:text-white transition-smooth">
-                      <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg
+                        className="w-5 h-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
                         <path
                           strokeLinecap="round"
                           strokeLinejoin="round"
@@ -130,7 +143,12 @@ const Home = () => {
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M9 5l7 7-7 7"
+                    />
                   </svg>
                 </div>
               </Link>

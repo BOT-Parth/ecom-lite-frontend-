@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import api from '../../services/api';
-import { API_ENDPOINTS } from '../../constants/api';
-import { useToast } from '../../hooks/useToast';
+import { useState } from "react";
+import api from "../../../services/api";
+import { API_ENDPOINTS } from "../../../constants/api";
+import { useToast } from "../../../hooks/useToast";
 
 const InventoryManager = ({ storeId, products, onRefresh }) => {
   const { showToast } = useToast();
@@ -17,23 +17,26 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
 
   const handleSaveStock = async (productId) => {
     const editVal = quantities[productId];
-    if (editVal === undefined || editVal === '') {
-      showToast('Please enter a valid stock quantity', 'warning');
+    if (editVal === undefined || editVal === "") {
+      showToast("Please enter a valid stock quantity", "warning");
       return;
     }
 
     const quantity = parseInt(editVal, 10);
     if (isNaN(quantity) || quantity < 0) {
-      showToast('Quantity must be a non-negative integer (>= 0)', 'error');
+      showToast("Quantity must be a non-negative integer (>= 0)", "error");
       return;
     }
 
     setSavingId(productId);
     try {
-      await api.patch(API_ENDPOINTS.INVENTORY.DETAIL_UPDATE(storeId, productId), {
-        quantity,
-      });
-      showToast('Inventory stock level updated successfully', 'success');
+      await api.patch(
+        API_ENDPOINTS.INVENTORY.DETAIL_UPDATE(storeId, productId),
+        {
+          quantity,
+        },
+      );
+      showToast("Inventory stock level updated successfully", "success");
       // Clear temp editing quantity state
       setQuantities((prev) => {
         const copy = { ...prev };
@@ -42,7 +45,7 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
       });
       onRefresh();
     } catch (err) {
-      showToast(err.message || 'Failed to update stock quantity', 'error');
+      showToast(err.message || "Failed to update stock quantity", "error");
     } finally {
       setSavingId(null);
     }
@@ -51,14 +54,22 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-150">
       <div>
-        <h2 className="text-lg font-bold text-white tracking-tight">Inventory Management</h2>
-        <p className="text-xs text-zinc-400 mt-1">Adjust and update current stock levels for products</p>
+        <h2 className="text-lg font-bold text-white tracking-tight">
+          Inventory Management
+        </h2>
+        <p className="text-xs text-zinc-400 mt-1">
+          Adjust and update current stock levels for products
+        </p>
       </div>
 
       {products.length === 0 ? (
         <div className="text-center py-12 glass-panel rounded-2xl border border-zinc-850 p-6">
-          <h3 className="text-sm font-semibold text-zinc-300">No products to manage stock</h3>
-          <p className="mt-1 text-xs text-zinc-500">Add products to your catalog to configure their inventory stock.</p>
+          <h3 className="text-sm font-semibold text-zinc-300">
+            No products to manage stock
+          </h3>
+          <p className="mt-1 text-xs text-zinc-500">
+            Add products to your catalog to configure their inventory stock.
+          </p>
         </div>
       ) : (
         <div className="glass-panel rounded-2xl border border-zinc-850 overflow-hidden shadow-lg">
@@ -76,26 +87,35 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
               {products.map((p) => {
                 const stock = p.inventory?.quantity ?? 0;
                 const draftValue = quantities[p.id];
-                const isModified = draftValue !== undefined && parseInt(draftValue, 10) !== stock;
+                const isModified =
+                  draftValue !== undefined &&
+                  parseInt(draftValue, 10) !== stock;
 
                 return (
-                  <tr key={p.id} className="hover:bg-zinc-900/10 transition-smooth">
-                    <td className="px-6 py-4 font-semibold text-white">{p.name}</td>
+                  <tr
+                    key={p.id}
+                    className="hover:bg-zinc-900/10 transition-smooth"
+                  >
+                    <td className="px-6 py-4 font-semibold text-white">
+                      {p.name}
+                    </td>
                     <td className="px-6 py-4">
                       {p.category?.name ? (
                         <span className="text-[9px] font-bold uppercase tracking-wider text-purple-400 bg-purple-950/20 px-2 py-0.5 rounded border border-purple-900/30">
                           {p.category.name}
                         </span>
                       ) : (
-                        <span className="text-[9px] text-zinc-650 uppercase">None</span>
+                        <span className="text-[9px] text-zinc-650 uppercase">
+                          None
+                        </span>
                       )}
                     </td>
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                           stock > 0
-                            ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/30'
-                            : 'bg-rose-950/80 text-rose-400 border border-rose-800/30'
+                            ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800/30"
+                            : "bg-rose-950/80 text-rose-400 border border-rose-800/30"
                         }`}
                       >
                         {stock} units
@@ -106,7 +126,9 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                         type="number"
                         min="0"
                         value={draftValue !== undefined ? draftValue : stock}
-                        onChange={(e) => handleInputChange(p.id, e.target.value)}
+                        onChange={(e) =>
+                          handleInputChange(p.id, e.target.value)
+                        }
                         className="w-24 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30"
                       />
                     </td>
@@ -117,11 +139,11 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                         onClick={() => handleSaveStock(p.id, stock)}
                         className={`px-3 py-1.5 rounded-lg text-xxs font-bold uppercase tracking-wider transition-smooth cursor-pointer ${
                           isModified
-                            ? 'bg-purple-600 hover:bg-purple-500 text-white shadow-lg'
-                            : 'bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50'
+                            ? "bg-purple-600 hover:bg-purple-500 text-white shadow-lg"
+                            : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50"
                         }`}
                       >
-                        {savingId === p.id ? 'Saving...' : 'Save Stock'}
+                        {savingId === p.id ? "Saving..." : "Save Stock"}
                       </button>
                     </td>
                   </tr>

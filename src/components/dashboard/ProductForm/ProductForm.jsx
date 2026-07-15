@@ -1,7 +1,13 @@
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
-const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, loading = false }) => {
+const ProductForm = ({
+  onSubmit,
+  categories = [],
+  initialData = null,
+  onCancel,
+  loading = false,
+}) => {
   const {
     register,
     handleSubmit,
@@ -9,28 +15,34 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
     formState: { errors },
   } = useForm({
     defaultValues: initialData || {
-      name: '',
-      description: '',
-      price: '',
-      imageUrls: '',
-      categoryId: '',
+      name: "",
+      description: "",
+      price: "",
+      imageUrls: "",
+      categoryId: "",
     },
   });
 
   useEffect(() => {
     if (initialData) {
-      setValue('name', initialData.name);
-      setValue('description', initialData.description || '');
-      setValue('price', initialData.price);
-      setValue('imageUrls', initialData.imageUrls ? initialData.imageUrls.join(', ') : '');
-      setValue('categoryId', initialData.categoryId || '');
+      setValue("name", initialData.name);
+      setValue("description", initialData.description || "");
+      setValue("price", initialData.price);
+      setValue(
+        "imageUrls",
+        initialData.imageUrls ? initialData.imageUrls.join(", ") : "",
+      );
+      setValue("categoryId", initialData.categoryId || "");
     }
   }, [initialData, setValue]);
 
   const handleFormSubmit = (data) => {
     // Process imageUrls comma separated string into an array of trimmed URLs
     const urls = data.imageUrls
-      ? data.imageUrls.split(',').map((url) => url.trim()).filter((url) => url !== '')
+      ? data.imageUrls
+          .split(",")
+          .map((url) => url.trim())
+          .filter((url) => url !== "")
       : [];
 
     // Parse price to float
@@ -41,32 +53,45 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
       description: data.description || null,
       price: parsedPrice,
       imageUrls: urls,
-      categoryId: data.categoryId === '' ? null : data.categoryId,
+      categoryId: data.categoryId === "" ? null : data.categoryId,
     };
 
     onSubmit(payload);
   };
 
   return (
-    <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4 max-h-[80vh] overflow-y-auto px-1">
+    <form
+      onSubmit={handleSubmit(handleFormSubmit)}
+      className="space-y-4 max-h-[80vh] overflow-y-auto px-1"
+    >
       <div>
         <label className="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">
           Product Name
         </label>
         <input
           type="text"
-          {...register('name', {
-            required: 'Product Name is required',
-            minLength: { value: 3, message: 'Name must be at least 3 characters' },
-            maxLength: { value: 100, message: 'Name cannot exceed 100 characters' },
+          {...register("name", {
+            required: "Product Name is required",
+            minLength: {
+              value: 3,
+              message: "Name must be at least 3 characters",
+            },
+            maxLength: {
+              value: 100,
+              message: "Name cannot exceed 100 characters",
+            },
           })}
           className={`w-full px-4 py-2.5 rounded-xl bg-zinc-900 border text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-smooth ${
-            errors.name ? 'border-rose-500/60 focus:ring-rose-500/50' : 'border-zinc-800 focus:border-purple-500'
+            errors.name
+              ? "border-rose-500/60 focus:ring-rose-500/50"
+              : "border-zinc-800 focus:border-purple-500"
           }`}
           placeholder="e.g. MacBook Pro M3"
         />
         {errors.name && (
-          <span className="text-xs text-rose-400 mt-1 block">{errors.name.message}</span>
+          <span className="text-xs text-rose-400 mt-1 block">
+            {errors.name.message}
+          </span>
         )}
       </div>
 
@@ -75,7 +100,7 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
           Description
         </label>
         <textarea
-          {...register('description')}
+          {...register("description")}
           rows="3"
           className="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-smooth"
           placeholder="Describe the product details..."
@@ -90,17 +115,22 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
           <input
             type="number"
             step="0.01"
-            {...register('price', {
-              required: 'Price is required',
-              validate: (value) => parseFloat(value) > 0 || 'Price must be a positive number',
+            {...register("price", {
+              required: "Price is required",
+              validate: (value) =>
+                parseFloat(value) > 0 || "Price must be a positive number",
             })}
             className={`w-full px-4 py-2.5 rounded-xl bg-zinc-900 border text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-smooth ${
-              errors.price ? 'border-rose-500/60 focus:ring-rose-500/50' : 'border-zinc-800 focus:border-purple-500'
+              errors.price
+                ? "border-rose-500/60 focus:ring-rose-500/50"
+                : "border-zinc-800 focus:border-purple-500"
             }`}
             placeholder="19.99"
           />
           {errors.price && (
-            <span className="text-xs text-rose-400 mt-1 block">{errors.price.message}</span>
+            <span className="text-xs text-rose-400 mt-1 block">
+              {errors.price.message}
+            </span>
           )}
         </div>
 
@@ -109,7 +139,7 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
             Category
           </label>
           <select
-            {...register('categoryId')}
+            {...register("categoryId")}
             className="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-smooth"
           >
             <option value="">Uncategorized (None)</option>
@@ -128,7 +158,7 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
         </label>
         <input
           type="text"
-          {...register('imageUrls')}
+          {...register("imageUrls")}
           className="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/50 transition-smooth"
           placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"
         />
@@ -139,7 +169,9 @@ const ProductForm = ({ onSubmit, categories = [], initialData = null, onCancel, 
 
       {!initialData && (
         <div className="p-3.5 rounded-xl bg-purple-950/20 border border-purple-800/30 text-purple-300 text-xxs leading-relaxed">
-          <strong>Note:</strong> Newly created products start with a stock quantity of <strong>0</strong> automatically. You can adjust the stock under the <strong>Inventory</strong> tab once the product is added.
+          <strong>Note:</strong> Newly created products start with a stock
+          quantity of <strong>0</strong> automatically. You can adjust the stock
+          under the <strong>Inventory</strong> tab once the product is added.
         </div>
       )}
 

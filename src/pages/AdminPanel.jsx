@@ -1,8 +1,8 @@
-import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
-import api from '../services/api';
-import { API_ENDPOINTS } from '../constants/api';
-import { useToast } from '../hooks/useToast';
+import { useState, useEffect, useCallback } from "react";
+import { Link } from "react-router-dom";
+import api from "../services/api";
+import { API_ENDPOINTS } from "../constants/api";
+import { useToast } from "../hooks/useToast";
 
 const AdminPanel = () => {
   const { showToast } = useToast();
@@ -22,7 +22,7 @@ const AdminPanel = () => {
       if (err.status === 403) {
         setForbidden(true);
       } else {
-        setError(err.message || 'Failed to fetch store requests');
+        setError(err.message || "Failed to fetch store requests");
       }
     } finally {
       setLoading(false);
@@ -44,7 +44,7 @@ const AdminPanel = () => {
           if (err.status === 403) {
             setForbidden(true);
           } else {
-            setError(err.message || 'Failed to fetch store requests');
+            setError(err.message || "Failed to fetch store requests");
           }
         }
       } finally {
@@ -52,30 +52,35 @@ const AdminPanel = () => {
       }
     };
     load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const handleApprove = async (id) => {
-    setActionLoading((prev) => ({ ...prev, [id]: 'approve' }));
+    setActionLoading((prev) => ({ ...prev, [id]: "approve" }));
     try {
       await api.patch(API_ENDPOINTS.STORE_REQUESTS.APPROVE(id));
-      showToast('Store request approved successfully. Store created.', 'success');
+      showToast(
+        "Store request approved successfully. Store created.",
+        "success",
+      );
       await fetchRequests();
     } catch (err) {
-      showToast(err.message || 'Failed to approve store request', 'error');
+      showToast(err.message || "Failed to approve store request", "error");
     } finally {
       setActionLoading((prev) => ({ ...prev, [id]: null }));
     }
   };
 
   const handleReject = async (id) => {
-    setActionLoading((prev) => ({ ...prev, [id]: 'reject' }));
+    setActionLoading((prev) => ({ ...prev, [id]: "reject" }));
     try {
       await api.patch(API_ENDPOINTS.STORE_REQUESTS.REJECT(id));
-      showToast('Store request rejected.', 'warning');
+      showToast("Store request rejected.", "warning");
       await fetchRequests();
     } catch (err) {
-      showToast(err.message || 'Failed to reject store request', 'error');
+      showToast(err.message || "Failed to reject store request", "error");
     } finally {
       setActionLoading((prev) => ({ ...prev, [id]: null }));
     }
@@ -95,7 +100,12 @@ const AdminPanel = () => {
       <div className="flex justify-center items-center py-20 px-4">
         <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-zinc-800 shadow-2xl text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-rose-950/50 text-rose-400 border border-rose-800/30 mb-4">
-            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -104,9 +114,13 @@ const AdminPanel = () => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight">Access Forbidden</h2>
+          <h2 className="text-xl font-bold text-white tracking-tight">
+            Access Forbidden
+          </h2>
           <p className="text-zinc-400 mt-2 text-xs leading-relaxed">
-            You do not have administrative permissions (`APPROVE_STORE`) to access this page. Administrative actions are restricted to super administrators.
+            You do not have administrative permissions (`APPROVE_STORE`) to
+            access this page. Administrative actions are restricted to super
+            administrators.
           </p>
           <div className="mt-6">
             <Link
@@ -124,8 +138,12 @@ const AdminPanel = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Platform Store Approvals</h1>
-        <p className="text-xs text-zinc-400 mt-1">Review pending merchant requests and approve or reject them</p>
+        <h1 className="text-2xl font-bold text-white tracking-tight">
+          Platform Store Approvals
+        </h1>
+        <p className="text-xs text-zinc-400 mt-1">
+          Review pending merchant requests and approve or reject them
+        </p>
       </div>
 
       {error && (
@@ -136,7 +154,12 @@ const AdminPanel = () => {
 
       {requests.length === 0 ? (
         <div className="text-center py-16 glass-panel rounded-2xl border border-zinc-850 p-8">
-          <svg className="mx-auto h-12 w-12 text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg
+            className="mx-auto h-12 w-12 text-zinc-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -144,7 +167,9 @@ const AdminPanel = () => {
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
             />
           </svg>
-          <h3 className="mt-4 text-sm font-semibold text-zinc-200">No requests queue</h3>
+          <h3 className="mt-4 text-sm font-semibold text-zinc-200">
+            No requests queue
+          </h3>
           <p className="mt-2 text-xs text-zinc-400 max-w-sm mx-auto">
             There are currently no store requests registered on the platform.
           </p>
@@ -162,45 +187,64 @@ const AdminPanel = () => {
             </thead>
             <tbody className="divide-y divide-zinc-900 text-zinc-300 font-medium">
               {requests.map((req) => (
-                <tr key={req.id} className="hover:bg-zinc-900/20 transition-smooth">
+                <tr
+                  key={req.id}
+                  className="hover:bg-zinc-900/20 transition-smooth"
+                >
                   <td className="px-6 py-4">
-                    <div className="text-sm font-semibold text-white">{req.name}</div>
-                    <div className="text-[10px] text-zinc-500 font-mono">/{req.slug}</div>
+                    <div className="text-sm font-semibold text-white">
+                      {req.name}
+                    </div>
+                    <div className="text-[10px] text-zinc-500 font-mono">
+                      /{req.slug}
+                    </div>
                   </td>
-                  <td className="px-6 py-4 text-zinc-400 font-mono text-[10px]">{req.userId}</td>
+                  <td className="px-6 py-4 text-zinc-400 font-mono text-[10px]">
+                    {req.userId}
+                  </td>
                   <td className="px-6 py-4">
                     <span
                       className={`inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
-                        req.status === 'PENDING'
-                          ? 'bg-amber-950/80 text-amber-400 border border-amber-800/30'
-                          : req.status === 'APPROVED'
-                          ? 'bg-emerald-950/80 text-emerald-400 border border-emerald-800/30'
-                          : 'bg-rose-950/80 text-rose-400 border border-rose-800/30'
+                        req.status === "PENDING"
+                          ? "bg-amber-950/80 text-amber-400 border border-amber-800/30"
+                          : req.status === "APPROVED"
+                            ? "bg-emerald-950/80 text-emerald-400 border border-emerald-800/30"
+                            : req.status === "NEEDS_CHANGES"
+                              ? "bg-blue-950/80 text-blue-400 border border-blue-800/30"
+                              : "bg-rose-950/80 text-rose-400 border border-rose-800/30"
                       }`}
                     >
-                      {req.status}
+                      {req.status === "NEEDS_CHANGES"
+                        ? "NEEDS CHANGES"
+                        : req.status}
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    {req.status === 'PENDING' ? (
+                    {req.status === "PENDING" ? (
                       <div className="flex justify-end gap-2">
                         <button
                           disabled={actionLoading[req.id]}
                           onClick={() => handleReject(req.id)}
                           className="px-3 py-1.5 rounded-lg border border-rose-800/30 bg-rose-950/20 hover:bg-rose-950/50 text-rose-400 disabled:opacity-50 transition-smooth cursor-pointer text-xxs font-bold uppercase tracking-wider"
                         >
-                          {actionLoading[req.id] === 'reject' ? 'Rejecting...' : 'Reject'}
+                          {actionLoading[req.id] === "reject"
+                            ? "Rejecting..."
+                            : "Reject"}
                         </button>
                         <button
                           disabled={actionLoading[req.id]}
                           onClick={() => handleApprove(req.id)}
                           className="px-3 py-1.5 rounded-lg border border-emerald-800/30 bg-emerald-950/20 hover:bg-emerald-950/50 text-emerald-400 disabled:opacity-50 transition-smooth cursor-pointer text-xxs font-bold uppercase tracking-wider"
                         >
-                          {actionLoading[req.id] === 'approve' ? 'Approving...' : 'Approve'}
+                          {actionLoading[req.id] === "approve"
+                            ? "Approving..."
+                            : "Approve"}
                         </button>
                       </div>
                     ) : (
-                      <span className="text-[10px] text-zinc-500 uppercase">Processed</span>
+                      <span className="text-[10px] text-zinc-500 uppercase">
+                        Processed
+                      </span>
                     )}
                   </td>
                 </tr>

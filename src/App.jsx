@@ -1,22 +1,21 @@
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { ToastProvider } from './context/ToastContext';
-import { AuthProvider } from './context/AuthContext';
-import ProtectedRoute from './components/auth/ProtectedRoute';
-import MainLayout from './layouts/MainLayout';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastProvider } from "./context/ToastContext";
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/auth/ProtectedRoute/ProtectedRoute";
+import MainLayout from "./layouts/MainLayout";
 
 // Pages
-import Home from './pages/Home';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Profile from './pages/Profile';
-import AdminPanel from './pages/AdminPanel';
-import PublicStore from './pages/PublicStore';
-import ProductDetails from './pages/ProductDetails';
-import StoreDashboard from './pages/StoreDashboard';
-import NotFound from './pages/NotFound';
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Profile from "./pages/Profile";
+import AdminPanel from "./pages/AdminPanel";
+import PublicStore from "./pages/PublicStore";
+import ProductDetails from "./pages/ProductDetails";
+import StoreDashboard from "./pages/StoreDashboard";
+import NotFound from "./pages/NotFound";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   return (
@@ -28,7 +27,10 @@ function App() {
               {/* Public Directories & Shops */}
               <Route path="/" element={<Home />} />
               <Route path="/stores/:storeSlug" element={<PublicStore />} />
-              <Route path="/stores/:storeSlug/products/:productId" element={<ProductDetails />} />
+              <Route
+                path="/stores/:storeSlug/products/:productId"
+                element={<ProductDetails />}
+              />
 
               {/* Authentication */}
               <Route path="/login" element={<Login />} />
