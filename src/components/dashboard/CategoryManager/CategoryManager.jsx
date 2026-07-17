@@ -1,3 +1,30 @@
+/**
+ * Layer:
+ * Business Component / Dashboard Module
+ *
+ * Purpose:
+ * Administers the category catalog for a specific store. Enables store admins to view,
+ * create, modify, and delete categories.
+ *
+ * Used By:
+ * - StoreDashboard.jsx
+ *
+ * Uses:
+ * - CategoryForm.jsx (creation/editing form)
+ * - api.js (Axios client)
+ * - useToast() (status alerts)
+ *
+ * Props Expected:
+ * - storeId (string) - UUID of the merchant store
+ * - categories (Array) - Category objects list
+ * - onRefresh (Function) - Callback to refresh store dashboard parent state
+ *
+ * Backend APIs:
+ * - POST /stores/:storeId/categories (create category)
+ * - PATCH /stores/:storeId/categories/:categoryId (update category name)
+ * - DELETE /stores/:storeId/categories/:categoryId (delete category)
+ */
+
 import { useState } from "react";
 import CategoryForm from "../CategoryForm/CategoryForm";
 import api from "../../../services/api";
@@ -60,10 +87,10 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-white tracking-tight">
+          <h2 className="text-lg font-bold text-brand-text tracking-tight">
             Category Catalog
           </h2>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-brand-muted mt-1">
             Organize products inside custom store categories
           </p>
         </div>
@@ -72,7 +99,7 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
             setEditingCategory(null);
             setIsFormOpen(true);
           }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl shadow-lg hover:shadow-purple-500/20 transition-smooth cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-primary hover:bg-brand-primary/90 text-white text-xs font-semibold rounded-xl shadow-lg hover:shadow-brand-primary/20 transition-smooth cursor-pointer"
         >
           Add Category
         </button>
@@ -80,9 +107,9 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
 
       {/* Category Editor Drawer/Modal Overlay */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-md glass-panel p-6 rounded-2xl border border-zinc-800 shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-base font-bold text-white mb-4 border-b border-zinc-900 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-surface/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-md glass-panel p-6 rounded-2xl border border-brand-border shadow-2xl animate-in zoom-in-95 duration-200">
+            <h3 className="text-base font-bold text-brand-text mb-4 border-b border-brand-border pb-2">
               {editingCategory ? "Edit Category" : "Create New Category"}
             </h3>
             <CategoryForm
@@ -100,34 +127,34 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
 
       {/* Categories List Table */}
       {categories.length === 0 ? (
-        <div className="text-center py-12 glass-panel rounded-2xl border border-zinc-850 p-6">
-          <h3 className="text-sm font-semibold text-zinc-300">
+        <div className="text-center py-12 glass-panel rounded-2xl border border-brand-border p-6">
+          <h3 className="text-sm font-semibold text-brand-muted">
             No categories created yet
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-brand-muted">
             Categories help organize catalog products in storefront directories.
           </p>
         </div>
       ) : (
-        <div className="glass-panel rounded-2xl border border-zinc-850 overflow-hidden shadow-lg">
-          <table className="min-w-full divide-y divide-zinc-900 text-left text-xs">
-            <thead className="bg-zinc-900/40 text-zinc-400 font-semibold uppercase tracking-wider">
+        <div className="glass-panel rounded-2xl border border-brand-border overflow-hidden shadow-lg">
+          <table className="min-w-full divide-y divide-brand-border text-left text-xs">
+            <thead className="bg-white/40 text-brand-muted font-semibold uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3.5">Category Name</th>
                 <th className="px-6 py-3.5">URL Slug</th>
                 <th className="px-6 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-900 text-zinc-300 font-medium">
+            <tbody className="divide-y divide-brand-border text-brand-muted font-medium">
               {categories.map((cat) => (
                 <tr
                   key={cat.id}
-                  className="hover:bg-zinc-900/10 transition-smooth"
+                  className="hover:bg-white/10 transition-smooth"
                 >
-                  <td className="px-6 py-4 font-semibold text-white">
+                  <td className="px-6 py-4 font-semibold text-brand-text">
                     {cat.name}
                   </td>
-                  <td className="px-6 py-4 text-zinc-400 font-mono">
+                  <td className="px-6 py-4 text-brand-muted font-mono">
                     /{cat.slug}
                   </td>
                   <td className="px-6 py-4 text-right">
@@ -137,7 +164,7 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
                           setEditingCategory(cat);
                           setIsFormOpen(true);
                         }}
-                        className="text-purple-400 hover:text-purple-300 font-bold transition-smooth cursor-pointer"
+                        className="text-brand-primary hover:text-brand-primary/80 font-bold transition-smooth cursor-pointer"
                       >
                         Edit
                       </button>
@@ -158,12 +185,12 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
 
       {/* Delete Confirmation Overlay */}
       {showConfirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm glass-panel p-6 rounded-2xl border border-zinc-850 shadow-2xl text-center">
-            <h4 className="text-base font-bold text-white mb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-surface/80 backdrop-blur-sm">
+          <div className="w-full max-w-sm glass-panel p-6 rounded-2xl border border-brand-border shadow-2xl text-center">
+            <h4 className="text-base font-bold text-brand-text mb-2">
               Delete Category?
             </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-6">
+            <p className="text-xs text-brand-muted leading-relaxed mb-6">
               Are you sure? Products linked to this category will **NOT** be
               deleted, but their category fields will be set to **NULL**
               (uncategorized).
@@ -172,7 +199,7 @@ const CategoryManager = ({ storeId, categories, onRefresh }) => {
               <button
                 type="button"
                 onClick={() => setShowConfirmDelete(null)}
-                className="px-4 py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded-xl border border-zinc-800 transition-smooth cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold bg-white hover:bg-brand-secondary text-brand-muted rounded-xl border border-brand-border transition-smooth cursor-pointer"
               >
                 Cancel
               </button>

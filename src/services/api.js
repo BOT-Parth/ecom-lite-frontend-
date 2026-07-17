@@ -1,3 +1,23 @@
+/**
+ * Layer:
+ * Service
+ *
+ * Purpose:
+ * Instantiates the Axios client configured with baseURL and request/response interceptors.
+ * Request Interceptor: Automatically attaches Bearer JWT authentication header from localStorage.
+ * Response Interceptor: Unwraps nested backend responses and handles unified error messages mapping.
+ *
+ * Used By:
+ * - AuthContext.jsx
+ * - SuperAdminRequests.jsx
+ * - Profile.jsx
+ * - BrowseStores.jsx
+ * - StoreDashboard.jsx
+ * - PublicStore.jsx
+ * - ProductDetails.jsx
+ * - storeResolver.js
+ */
+
 import axios from 'axios';
 
 const api = axios.create({

@@ -1,3 +1,21 @@
+/**
+ * Layer:
+ * Constants
+ *
+ * Purpose:
+ * Centralized list of API endpoints paths matching the backend router structure.
+ *
+ * Used By:
+ * - AuthContext.jsx
+ * - SuperAdminRequests.jsx
+ * - Profile.jsx
+ * - BrowseStores.jsx
+ * - StoreDashboard.jsx
+ * - PublicStore.jsx
+ * - ProductDetails.jsx
+ * - storeResolver.js
+ */
+
 export const API_ENDPOINTS = {
   AUTH: {
     LOGIN: "/auth/login",
@@ -8,6 +26,7 @@ export const API_ENDPOINTS = {
     PUBLIC_LIST: "/stores",
     MY_LIST: "/stores/my",
     DETAIL: (storeId) => `/stores/${storeId}`,
+    SETTINGS: (storeId) => `/stores/${storeId}/settings`,
   },
   STORE_REQUESTS: {
     CREATE: "/store-requests",
