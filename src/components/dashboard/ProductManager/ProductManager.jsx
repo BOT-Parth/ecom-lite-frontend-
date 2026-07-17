@@ -1,3 +1,31 @@
+/**
+ * Layer:
+ * Business Component / Dashboard Module
+ *
+ * Purpose:
+ * Administers the product catalog for a specific store. Enables store admins to view,
+ * create, modify, and delete products.
+ *
+ * Used By:
+ * - StoreDashboard.jsx
+ *
+ * Uses:
+ * - ProductForm.jsx (creation/editing form)
+ * - api.js (Axios client)
+ * - useToast() (status alerts)
+ *
+ * Props Expected:
+ * - storeId (string) - UUID of the merchant store
+ * - products (Array) - Product objects list (including nested category and inventory objects)
+ * - categories (Array) - Active store categories list for select dropdowns
+ * - onRefresh (Function) - Callback to refresh store dashboard parent state
+ *
+ * Backend APIs:
+ * - POST /stores/:storeId/products (create product)
+ * - PATCH /stores/:storeId/products/:productId (update product specifications)
+ * - DELETE /stores/:storeId/products/:productId (delete product)
+ */
+
 import { useState } from "react";
 import ProductForm from "../ProductForm/ProductForm";
 import api from "../../../services/api";
@@ -58,10 +86,10 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-white tracking-tight">
+          <h2 className="text-lg font-bold text-brand-text tracking-tight">
             Products Catalog
           </h2>
-          <p className="text-xs text-zinc-400 mt-1">
+          <p className="text-xs text-brand-muted mt-1">
             Manage listings, prices, descriptions, and categories
           </p>
         </div>
@@ -70,7 +98,7 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
             setEditingProduct(null);
             setIsFormOpen(true);
           }}
-          className="inline-flex items-center gap-1.5 px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold rounded-xl shadow-lg hover:shadow-purple-500/20 transition-smooth cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-primary hover:bg-brand-primary/90 text-white text-xs font-semibold rounded-xl shadow-lg hover:shadow-brand-primary/20 transition-smooth cursor-pointer"
         >
           Add Product
         </button>
@@ -78,9 +106,9 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
 
       {/* Product Editor Modal */}
       {isFormOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm animate-in fade-in duration-150">
-          <div className="w-full max-w-lg glass-panel p-6 rounded-2xl border border-zinc-800 shadow-2xl animate-in zoom-in-95 duration-200">
-            <h3 className="text-base font-bold text-white mb-4 border-b border-zinc-900 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-surface/80 backdrop-blur-sm animate-in fade-in duration-150">
+          <div className="w-full max-w-lg glass-panel p-6 rounded-2xl border border-brand-border shadow-2xl animate-in zoom-in-95 duration-200">
+            <h3 className="text-base font-bold text-brand-text mb-4 border-b border-brand-border pb-2">
               {editingProduct ? "Edit Product" : "Create New Product"}
             </h3>
             <ProductForm
@@ -99,18 +127,18 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
 
       {/* Product List Table */}
       {products.length === 0 ? (
-        <div className="text-center py-12 glass-panel rounded-2xl border border-zinc-850 p-6">
-          <h3 className="text-sm font-semibold text-zinc-300">
+        <div className="text-center py-12 glass-panel rounded-2xl border border-brand-border p-6">
+          <h3 className="text-sm font-semibold text-brand-muted">
             No products created yet
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-brand-muted">
             Create new products to list them on your storefront.
           </p>
         </div>
       ) : (
-        <div className="glass-panel rounded-2xl border border-zinc-850 overflow-hidden shadow-lg">
-          <table className="min-w-full divide-y divide-zinc-900 text-left text-xs">
-            <thead className="bg-zinc-900/40 text-zinc-400 font-semibold uppercase tracking-wider">
+        <div className="glass-panel rounded-2xl border border-brand-border overflow-hidden shadow-lg">
+          <table className="min-w-full divide-y divide-brand-border text-left text-xs">
+            <thead className="bg-white/40 text-brand-muted font-semibold uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3.5">Product</th>
                 <th className="px-6 py-3.5">Category</th>
@@ -119,36 +147,36 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
                 <th className="px-6 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-900 text-zinc-300 font-medium">
+            <tbody className="divide-y divide-brand-border text-brand-muted font-medium">
               {products.map((p) => {
                 const stock = p.inventory?.quantity ?? 0;
                 return (
                   <tr
                     key={p.id}
-                    className="hover:bg-zinc-900/10 transition-smooth"
+                    className="hover:bg-white/10 transition-smooth"
                   >
                     <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-white">
+                      <div className="text-sm font-semibold text-brand-text">
                         {p.name}
                       </div>
                       {p.description && (
-                        <div className="text-[10px] text-zinc-500 truncate max-w-xs mt-0.5">
+                        <div className="text-[10px] text-brand-muted truncate max-w-xs mt-0.5">
                           {p.description}
                         </div>
                       )}
                     </td>
                     <td className="px-6 py-4">
                       {p.category?.name ? (
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-purple-400 bg-purple-950/20 px-2 py-0.5 rounded border border-purple-900/30">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">
                           {p.category.name}
                         </span>
                       ) : (
-                        <span className="text-[9px] text-zinc-650 uppercase">
+                        <span className="text-[9px] text-brand-muted uppercase">
                           None
                         </span>
                       )}
                     </td>
-                    <td className="px-6 py-4 font-mono font-semibold text-white">
+                    <td className="px-6 py-4 font-mono font-semibold text-brand-text">
                       ${parseFloat(p.price).toFixed(2)}
                     </td>
                     <td className="px-6 py-4">
@@ -169,7 +197,7 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
                             setEditingProduct(p);
                             setIsFormOpen(true);
                           }}
-                          className="text-purple-400 hover:text-purple-300 font-bold transition-smooth cursor-pointer"
+                          className="text-brand-primary hover:text-brand-primary/80 font-bold transition-smooth cursor-pointer"
                         >
                           Edit
                         </button>
@@ -191,12 +219,12 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
 
       {/* Delete Confirmation Overlay */}
       {showConfirmDelete && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-zinc-950/80 backdrop-blur-sm">
-          <div className="w-full max-w-sm glass-panel p-6 rounded-2xl border border-zinc-850 shadow-2xl text-center">
-            <h4 className="text-base font-bold text-white mb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-brand-surface/80 backdrop-blur-sm">
+          <div className="w-full max-w-sm glass-panel p-6 rounded-2xl border border-brand-border shadow-2xl text-center">
+            <h4 className="text-base font-bold text-brand-text mb-2">
               Delete Product?
             </h4>
-            <p className="text-xs text-zinc-400 leading-relaxed mb-6">
+            <p className="text-xs text-brand-muted leading-relaxed mb-6">
               Are you sure you want to delete this product? This action is
               permanent and will remove the item and its inventory history.
             </p>
@@ -204,7 +232,7 @@ const ProductManager = ({ storeId, products, categories, onRefresh }) => {
               <button
                 type="button"
                 onClick={() => setShowConfirmDelete(null)}
-                className="px-4 py-2 text-xs font-semibold bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded-xl border border-zinc-800 transition-smooth cursor-pointer"
+                className="px-4 py-2 text-xs font-semibold bg-white hover:bg-brand-secondary text-brand-muted rounded-xl border border-brand-border transition-smooth cursor-pointer"
               >
                 Cancel
               </button>

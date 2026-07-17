@@ -135,8 +135,8 @@ const StoreDashboard = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-sm text-zinc-400">
+        <div className="w-10 h-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm text-brand-muted">
           Loading store dashboard details...
         </p>
       </div>
@@ -146,7 +146,7 @@ const StoreDashboard = () => {
   if (forbidden) {
     return (
       <div className="flex justify-center items-center py-20 px-4">
-        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-zinc-800 shadow-2xl text-center">
+        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-brand-border shadow-2xl text-center">
           <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-rose-950/50 text-rose-400 border border-rose-800/30 mb-4">
             <svg
               className="w-6 h-6"
@@ -162,10 +162,10 @@ const StoreDashboard = () => {
               />
             </svg>
           </div>
-          <h2 className="text-xl font-bold text-white tracking-tight">
+          <h2 className="text-xl font-bold text-brand-text tracking-tight">
             Access Restricted
           </h2>
-          <p className="text-zinc-400 mt-2 text-xs leading-relaxed">
+          <p className="text-brand-muted mt-2 text-xs leading-relaxed">
             You do not have permission to manage this store. You must possess
             the `MANAGE_PRODUCTS` membership role (e.g. Owner or Staff) inside
             this store to access its catalog tools.
@@ -173,7 +173,7 @@ const StoreDashboard = () => {
           <div className="mt-6">
             <Link
               to="/profile"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-zinc-850 hover:bg-zinc-850 transition-smooth"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-brand-text bg-white hover:bg-brand-secondary transition-smooth"
             >
               Back to Dashboard
             </Link>
@@ -186,17 +186,17 @@ const StoreDashboard = () => {
   if (error || !store) {
     return (
       <div className="flex justify-center items-center py-20 px-4">
-        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-zinc-850 text-center">
-          <h2 className="text-xl font-bold text-white tracking-tight">
+        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-brand-border text-center">
+          <h2 className="text-xl font-bold text-brand-text tracking-tight">
             Dashboard Load Failed
           </h2>
-          <p className="text-zinc-400 mt-2 text-xs leading-relaxed">
+          <p className="text-brand-muted mt-2 text-xs leading-relaxed">
             {error || "Failed to initialize store panel."}
           </p>
           <div className="mt-6">
             <Link
               to="/profile"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-purple-600 hover:bg-purple-500 transition-smooth"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-brand-primary hover:bg-brand-primary/90 transition-smooth"
             >
               Back to Dashboard
             </Link>
@@ -209,14 +209,14 @@ const StoreDashboard = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header Banner */}
-      <div className="glass-panel p-8 rounded-3xl border border-zinc-800/40 relative overflow-hidden bg-gradient-to-r from-zinc-900/50 via-zinc-950 to-zinc-950">
-        <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
+      <div className="glass-panel p-8 rounded-3xl border border-brand-border relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-brand-primary/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative">
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight">
+            <h1 className="text-2xl font-bold text-brand-text tracking-tight">
               Merchant Panel: {store.name}
             </h1>
-            <p className="text-xs text-zinc-400 mt-1">
+            <p className="text-xs text-brand-muted mt-1">
               /{store.slug} &bull; Manage products, categories and inventory
               stock
             </p>
@@ -224,7 +224,7 @@ const StoreDashboard = () => {
           <div>
             <Link
               to={`/stores/${store.slug}`}
-              className="inline-flex items-center gap-1 text-xs font-semibold px-4 py-2 bg-zinc-900 hover:bg-zinc-800 text-zinc-300 rounded-xl border border-zinc-800 transition-smooth cursor-pointer"
+              className="inline-flex items-center gap-1 text-xs font-semibold px-4 py-2 bg-white hover:bg-brand-secondary text-brand-muted rounded-xl border border-brand-border transition-smooth cursor-pointer"
             >
               View Public Shop
               <svg
@@ -246,13 +246,13 @@ const StoreDashboard = () => {
       </div>
 
       {/* Tabs Selector Navigation */}
-      <div className="flex border-b border-zinc-900 gap-2">
+      <div className="flex border-b border-brand-border gap-2">
         <button
           onClick={() => setActiveTab("products")}
           className={`px-5 py-3 text-xs font-semibold border-b-2 transition-smooth cursor-pointer ${
             activeTab === "products"
-              ? "border-purple-500 text-white"
-              : "border-transparent text-zinc-400 hover:text-zinc-200"
+              ? "border-brand-primary text-brand-text"
+              : "border-transparent text-brand-muted hover:text-brand-text"
           }`}
         >
           Catalog Products
@@ -261,8 +261,8 @@ const StoreDashboard = () => {
           onClick={() => setActiveTab("categories")}
           className={`px-5 py-3 text-xs font-semibold border-b-2 transition-smooth cursor-pointer ${
             activeTab === "categories"
-              ? "border-purple-500 text-white"
-              : "border-transparent text-zinc-400 hover:text-zinc-200"
+              ? "border-brand-primary text-brand-text"
+              : "border-transparent text-brand-muted hover:text-brand-text"
           }`}
         >
           Catalog Categories
@@ -271,8 +271,8 @@ const StoreDashboard = () => {
           onClick={() => setActiveTab("inventory")}
           className={`px-5 py-3 text-xs font-semibold border-b-2 transition-smooth cursor-pointer ${
             activeTab === "inventory"
-              ? "border-purple-500 text-white"
-              : "border-transparent text-zinc-400 hover:text-zinc-200"
+              ? "border-brand-primary text-brand-text"
+              : "border-transparent text-brand-muted hover:text-brand-text"
           }`}
         >
           Inventory Stock

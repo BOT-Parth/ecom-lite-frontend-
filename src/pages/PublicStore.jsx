@@ -1,3 +1,26 @@
+/**
+ * Layer:
+ * Page
+ *
+ * Purpose:
+ * Renders the public store storefront customer-facing catalog.
+ * Displays store details, catalog categories sidebar, filtered product listing grid,
+ * and handles fallbacks if the store does not exist.
+ *
+ * Used By:
+ * - App.jsx (routes mapping)
+ *
+ * Uses:
+ * - storeResolver.js (slug resolving)
+ * - api.js (Axios client)
+ * - API_ENDPOINTS (constants)
+ *
+ * Backend APIs:
+ * - GET /stores/slug/:slug (via resolver)
+ * - GET /stores/:storeId/categories
+ * - GET /stores/:storeId/products
+ */
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
@@ -82,8 +105,8 @@ const PublicStore = () => {
   if (loadingStore) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-sm text-zinc-400">Loading storefront details...</p>
+        <div className="w-10 h-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm text-brand-muted">Loading storefront details...</p>
       </div>
     );
   }
@@ -91,18 +114,18 @@ const PublicStore = () => {
   if (error || !store) {
     return (
       <div className="flex justify-center items-center py-20 px-4">
-        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-zinc-800 text-center">
-          <h2 className="text-xl font-bold text-white tracking-tight">
+        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-brand-border text-center">
+          <h2 className="text-xl font-bold text-brand-text tracking-tight">
             Store Not Found
           </h2>
-          <p className="text-zinc-400 mt-2 text-xs leading-relaxed">
+          <p className="text-brand-muted mt-2 text-xs leading-relaxed">
             {error ||
               "The requested storefront could not be located in our active directory."}
           </p>
           <div className="mt-6">
             <Link
               to="/"
-              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-purple-600 hover:bg-purple-500 transition-smooth"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-brand-primary hover:bg-brand-primary/90 transition-smooth"
             >
               Back to Marketplace
             </Link>
@@ -115,28 +138,50 @@ const PublicStore = () => {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Store Banner */}
-      <div className="glass-panel p-8 rounded-3xl border border-zinc-800/40 relative overflow-hidden bg-gradient-to-r from-zinc-900/50 via-zinc-950 to-zinc-950">
-        <div className="absolute top-0 right-0 w-48 h-48 bg-indigo-500/5 rounded-full blur-3xl"></div>
+      <div className="glass-panel p-8 rounded-3xl border border-brand-border relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-48 h-48 bg-brand-primary/10 rounded-full blur-3xl"></div>
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-extrabold text-white tracking-tight">
-              {store.name}
-            </h1>
-            <p className="text-xs text-zinc-500 mt-1 font-mono">
-              Store Domain: /{store.slug}
-            </p>
+          <div className="flex items-center gap-5">
+            {store.avatarUrl ? (
+              <img
+                src={store.avatarUrl}
+                alt={store.name}
+                className="w-16 h-16 rounded-2xl object-cover border border-brand-border shadow-md"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.style.display = "none";
+                }}
+              />
+            ) : (
+              <div className="h-16 w-16 rounded-2xl bg-brand-secondary flex items-center justify-center font-bold text-2xl text-brand-text border border-brand-primary shadow-md">
+                {store.name?.charAt(0).toUpperCase()}
+              </div>
+            )}
+            <div>
+              <h1 className="text-3xl font-extrabold text-brand-text tracking-tight">
+                {store.name}
+              </h1>
+              <p className="text-xs text-brand-muted mt-1 font-mono">
+                Store Domain: /{store.slug}
+              </p>
+            </div>
           </div>
           <span className="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-950/40 text-emerald-300 border border-emerald-800/30 uppercase tracking-wider">
             Active Storefront
           </span>
         </div>
+        {store.description && (
+          <p className="text-sm text-brand-muted mt-6 max-w-2xl leading-relaxed border-t border-brand-border pt-4">
+            {store.description}
+          </p>
+        )}
       </div>
 
       {/* Catalog Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Category Sidebar */}
         <div className="lg:col-span-1 space-y-4">
-          <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">
+          <h2 className="text-sm font-bold text-brand-muted uppercase tracking-wider">
             Categories
           </h2>
           <div className="flex flex-wrap lg:flex-col gap-1.5">
@@ -144,8 +189,8 @@ const PublicStore = () => {
               onClick={() => setSelectedCategoryId("")}
               className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-semibold transition-smooth border cursor-pointer ${
                 selectedCategoryId === ""
-                  ? "bg-purple-600 border-purple-500 text-white shadow-md"
-                  : "bg-zinc-900/40 border-zinc-800/80 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40"
+                  ? "bg-brand-primary border-brand-primary text-white shadow-md"
+                  : "bg-white/40 border-brand-border text-brand-muted hover:text-brand-text hover:bg-brand-secondary/40"
               }`}
             >
               All Products
@@ -156,8 +201,8 @@ const PublicStore = () => {
                 onClick={() => setSelectedCategoryId(cat.id)}
                 className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-semibold transition-smooth border cursor-pointer ${
                   selectedCategoryId === cat.id
-                    ? "bg-purple-600 border-purple-500 text-white shadow-md"
-                    : "bg-zinc-900/40 border-zinc-800/80 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/40"
+                    ? "bg-brand-primary border-brand-primary text-white shadow-md"
+                    : "bg-white/40 border-brand-border text-brand-muted hover:text-brand-text hover:bg-brand-secondary/40"
                 }`}
               >
                 {cat.name}
@@ -168,28 +213,28 @@ const PublicStore = () => {
 
         {/* Products Grid */}
         <div className="lg:col-span-3 space-y-6">
-          <div className="flex items-center justify-between border-b border-zinc-900 pb-3">
-            <h2 className="text-sm font-bold text-zinc-400 uppercase tracking-wider">
+          <div className="flex items-center justify-between border-b border-brand-border pb-3">
+            <h2 className="text-sm font-bold text-brand-muted uppercase tracking-wider">
               Products
             </h2>
-            <span className="text-xs text-zinc-500 font-medium">
+            <span className="text-xs text-brand-muted font-medium">
               {products.length} {products.length === 1 ? "item" : "items"} found
             </span>
           </div>
 
           {loadingProducts ? (
             <div className="flex flex-col items-center justify-center py-20 gap-3">
-              <div className="w-8 h-8 border-3 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-xs text-zinc-500">
+              <div className="w-8 h-8 border-3 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+              <p className="text-xs text-brand-muted">
                 Updating product catalog...
               </p>
             </div>
           ) : products.length === 0 ? (
-            <div className="text-center py-16 glass-panel rounded-2xl border border-zinc-850 p-8">
-              <h3 className="text-sm font-semibold text-zinc-300">
+            <div className="text-center py-16 glass-panel rounded-2xl border border-brand-border p-8">
+              <h3 className="text-sm font-semibold text-brand-muted">
                 No products available
               </h3>
-              <p className="mt-2 text-xs text-zinc-500 max-w-sm mx-auto">
+              <p className="mt-2 text-xs text-brand-muted max-w-sm mx-auto">
                 No products are listed in this category at this time. Check back
                 later!
               </p>
@@ -200,9 +245,9 @@ const PublicStore = () => {
                 <Link
                   key={product.id}
                   to={`/stores/${storeSlug}/products/${product.id}`}
-                  className="group rounded-2xl glass-card border border-zinc-850 overflow-hidden flex flex-col justify-between"
+                  className="group rounded-2xl glass-card border border-brand-border overflow-hidden flex flex-col justify-between"
                 >
-                  <div className="aspect-video w-full bg-zinc-900 flex items-center justify-center overflow-hidden border-b border-zinc-900 relative">
+                  <div className="aspect-video w-full bg-white flex items-center justify-center overflow-hidden border-b border-brand-border relative">
                     {product.imageUrls && product.imageUrls.length > 0 ? (
                       <img
                         src={product.imageUrls[0]}
@@ -215,7 +260,7 @@ const PublicStore = () => {
                         }}
                       />
                     ) : (
-                      <div className="flex flex-col items-center gap-1 text-zinc-600">
+                      <div className="flex flex-col items-center gap-1 text-brand-muted">
                         <svg
                           className="w-8 h-8 opacity-40"
                           fill="none"
@@ -238,22 +283,22 @@ const PublicStore = () => {
                   <div className="p-5 flex-1 flex flex-col justify-between">
                     <div>
                       {product.category?.name && (
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-purple-400 bg-purple-950/30 px-2 py-0.5 rounded border border-purple-900/30 mb-2 inline-block">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20 mb-2 inline-block">
                           {product.category.name}
                         </span>
                       )}
-                      <h3 className="text-sm font-bold text-white group-hover:text-purple-400 transition-smooth line-clamp-1">
+                      <h3 className="text-sm font-bold text-brand-text group-hover:text-brand-primary/80 transition-smooth line-clamp-1">
                         {product.name}
                       </h3>
-                      <p className="text-xs text-zinc-400 mt-1 line-clamp-2 leading-relaxed">
+                      <p className="text-xs text-brand-muted mt-1 line-clamp-2 leading-relaxed">
                         {product.description || "No description provided."}
                       </p>
                     </div>
-                    <div className="mt-5 pt-4 border-t border-zinc-900 flex items-center justify-between">
-                      <span className="text-sm font-black text-white">
+                    <div className="mt-5 pt-4 border-t border-brand-border flex items-center justify-between">
+                      <span className="text-sm font-black text-brand-text">
                         ${parseFloat(product.price).toFixed(2)}
                       </span>
-                      <span className="text-xxs font-bold text-purple-400 group-hover:underline">
+                      <span className="text-xxs font-bold text-brand-primary group-hover:underline">
                         View Product &rarr;
                       </span>
                     </div>

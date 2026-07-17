@@ -1,3 +1,24 @@
+/**
+ * Layer:
+ * Page
+ *
+ * Purpose:
+ * Renders the customer-facing details view of a single product within a public store storefront.
+ * Displays image gallery, name, price, stock status, and category tags.
+ *
+ * Used By:
+ * - App.jsx (routes mapping)
+ *
+ * Uses:
+ * - storeResolver.js (slug resolving)
+ * - api.js (Axios client)
+ * - API_ENDPOINTS (constants)
+ *
+ * Backend APIs:
+ * - GET /stores/slug/:slug (via resolver)
+ * - GET /stores/:storeId/products/:productId
+ */
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
@@ -42,8 +63,8 @@ const ProductDetails = () => {
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center py-20 gap-4">
-        <div className="w-10 h-10 border-4 border-purple-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-sm text-zinc-400">Loading product details...</p>
+        <div className="w-10 h-10 border-4 border-brand-primary border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-sm text-brand-muted">Loading product details...</p>
       </div>
     );
   }
@@ -51,17 +72,17 @@ const ProductDetails = () => {
   if (error || !product) {
     return (
       <div className="flex justify-center items-center py-20 px-4">
-        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-zinc-800 text-center">
-          <h2 className="text-xl font-bold text-white tracking-tight">
+        <div className="w-full max-w-md glass-panel p-8 rounded-2xl border border-brand-border text-center">
+          <h2 className="text-xl font-bold text-brand-text tracking-tight">
             Product Not Found
           </h2>
-          <p className="text-zinc-400 mt-2 text-xs leading-relaxed">
+          <p className="text-brand-muted mt-2 text-xs leading-relaxed">
             {error || "The requested product could not be located."}
           </p>
           <div className="mt-6">
             <Link
               to={store ? `/stores/${store.slug}` : "/"}
-              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-purple-600 hover:bg-purple-500 transition-smooth"
+              className="inline-flex items-center px-4 py-2 border border-transparent text-xs font-semibold rounded-xl text-white bg-brand-primary hover:bg-brand-primary/90 transition-smooth"
             >
               Back to Store
             </Link>
@@ -79,7 +100,7 @@ const ProductDetails = () => {
       <div>
         <Link
           to={`/stores/${storeSlug}`}
-          className="inline-flex items-center gap-2 text-xs font-semibold text-zinc-400 hover:text-zinc-200 transition-smooth cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-semibold text-brand-muted hover:text-brand-text transition-smooth cursor-pointer"
         >
           <svg
             className="w-4 h-4"
@@ -99,10 +120,10 @@ const ProductDetails = () => {
       </div>
 
       {/* Product Card */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-zinc-800/40 relative overflow-hidden bg-gradient-to-r from-zinc-900/30 via-zinc-950 to-zinc-950">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-brand-border relative overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           {/* Product Image Section */}
-          <div className="md:col-span-6 aspect-square w-full rounded-2xl bg-zinc-900 border border-zinc-800/50 flex items-center justify-center overflow-hidden relative">
+          <div className="md:col-span-6 aspect-square w-full rounded-2xl bg-white border border-brand-border flex items-center justify-center overflow-hidden relative">
             {product.imageUrls && product.imageUrls.length > 0 ? (
               <img
                 src={product.imageUrls[0]}
@@ -115,7 +136,7 @@ const ProductDetails = () => {
                 }}
               />
             ) : (
-              <div className="flex flex-col items-center gap-2 text-zinc-600">
+              <div className="flex flex-col items-center gap-2 text-brand-muted">
                 <svg
                   className="w-12 h-12 opacity-30"
                   fill="none"
@@ -140,17 +161,17 @@ const ProductDetails = () => {
           <div className="md:col-span-6 space-y-6">
             <div>
               {product.category?.name && (
-                <span className="text-[10px] font-bold uppercase tracking-wider text-purple-400 bg-purple-950/30 px-3 py-1 rounded border border-purple-900/30 mb-3 inline-block">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-3 py-1 rounded border border-brand-primary/20 mb-3 inline-block">
                   {product.category.name}
                 </span>
               )}
-              <h1 className="text-3xl font-extrabold text-white tracking-tight">
+              <h1 className="text-3xl font-extrabold text-brand-text tracking-tight">
                 {product.name}
               </h1>
             </div>
 
-            <div className="flex items-center gap-4 py-3 border-y border-zinc-900">
-              <span className="text-2xl font-black text-white">
+            <div className="flex items-center gap-4 py-3 border-y border-brand-border">
+              <span className="text-2xl font-black text-brand-text">
                 ${parseFloat(product.price).toFixed(2)}
               </span>
               <span
@@ -165,10 +186,10 @@ const ProductDetails = () => {
             </div>
 
             <div className="space-y-2">
-              <h3 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
+              <h3 className="text-xs font-bold text-brand-muted uppercase tracking-wider">
                 Description
               </h3>
-              <p className="text-zinc-300 text-sm leading-relaxed whitespace-pre-wrap">
+              <p className="text-brand-muted text-sm leading-relaxed whitespace-pre-wrap">
                 {product.description ||
                   "No description provided for this product."}
               </p>

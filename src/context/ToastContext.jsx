@@ -1,9 +1,35 @@
+/**
+ * Layer:
+ * Context
+ *
+ * Purpose:
+ * Provides global toast notification alerts overlay services.
+ *
+ * Used By:
+ * - App.jsx (ToastProvider wrapping)
+ * - useToast.js (hook)
+ *
+ * Renders:
+ * - Floating toasts overlay at top right of the viewport
+ */
+
 import { useState, useCallback } from 'react';
 import { ToastContext } from '../hooks/useToast';
 
 export const ToastProvider = ({ children }) => {
   const [toasts, setToasts] = useState([]);
 
+  /**
+   * Appends a new toast alert to the list and sets auto-cleanup timer.
+   *
+   * Called:
+   * - Globally by any component needing to notify the user.
+   *
+   * Parameters:
+   * - message (string)
+   * - type ('success' | 'error' | 'warning' | 'info')
+   * - duration (number) in milliseconds (default 4000)
+   */
   const showToast = useCallback((message, type = 'info', duration = 4000) => {
     const id = Date.now() + Math.random().toString(36).substr(2, 9);
     setToasts((prevToasts) => [...prevToasts, { id, message, type }]);
@@ -13,6 +39,12 @@ export const ToastProvider = ({ children }) => {
     }, duration);
   }, []);
 
+  /**
+   * Dismisses a toast manually.
+   *
+   * Called:
+   * - Clicking on a toast item close button or card area.
+   */
   const removeToast = useCallback((id) => {
     setToasts((prevToasts) => prevToasts.filter((toast) => toast.id !== id));
   }, []);
@@ -33,7 +65,7 @@ export const ToastProvider = ({ children }) => {
                 ? 'bg-rose-950/80 border-rose-500/30 text-rose-200'
                 : toast.type === 'warning'
                 ? 'bg-amber-950/80 border-amber-500/30 text-amber-200'
-                : 'bg-zinc-900/80 border-zinc-700/50 text-zinc-200'
+                : 'bg-white/80 border-brand-border text-brand-text'
             }`}
           >
             <div className="flex-1 text-sm font-medium">{toast.message}</div>

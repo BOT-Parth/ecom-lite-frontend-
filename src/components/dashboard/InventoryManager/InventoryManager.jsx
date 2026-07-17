@@ -1,3 +1,27 @@
+/**
+ * Layer:
+ * Business Component / Dashboard Module
+ *
+ * Purpose:
+ * Administers the inventory levels for products within a specific store. Enables store admins
+ * to view current stock counts and submit adjustments to the backend database.
+ *
+ * Used By:
+ * - StoreDashboard.jsx
+ *
+ * Uses:
+ * - api.js (Axios client)
+ * - useToast() (status alerts)
+ *
+ * Props Expected:
+ * - storeId (string) - UUID of the merchant store
+ * - products (Array) - Product list (with nested inventory objects to get quantity)
+ * - onRefresh (Function) - Callback to refresh store dashboard parent state
+ *
+ * Backend APIs:
+ * - PATCH /stores/:storeId/products/:productId/inventory (update product stock level)
+ */
+
 import { useState } from "react";
 import api from "../../../services/api";
 import { API_ENDPOINTS } from "../../../constants/api";
@@ -54,27 +78,27 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-150">
       <div>
-        <h2 className="text-lg font-bold text-white tracking-tight">
+        <h2 className="text-lg font-bold text-brand-text tracking-tight">
           Inventory Management
         </h2>
-        <p className="text-xs text-zinc-400 mt-1">
+        <p className="text-xs text-brand-muted mt-1">
           Adjust and update current stock levels for products
         </p>
       </div>
 
       {products.length === 0 ? (
-        <div className="text-center py-12 glass-panel rounded-2xl border border-zinc-850 p-6">
-          <h3 className="text-sm font-semibold text-zinc-300">
+        <div className="text-center py-12 glass-panel rounded-2xl border border-brand-border p-6">
+          <h3 className="text-sm font-semibold text-brand-muted">
             No products to manage stock
           </h3>
-          <p className="mt-1 text-xs text-zinc-500">
+          <p className="mt-1 text-xs text-brand-muted">
             Add products to your catalog to configure their inventory stock.
           </p>
         </div>
       ) : (
-        <div className="glass-panel rounded-2xl border border-zinc-850 overflow-hidden shadow-lg">
-          <table className="min-w-full divide-y divide-zinc-900 text-left text-xs">
-            <thead className="bg-zinc-900/40 text-zinc-400 font-semibold uppercase tracking-wider">
+        <div className="glass-panel rounded-2xl border border-brand-border overflow-hidden shadow-lg">
+          <table className="min-w-full divide-y divide-brand-border text-left text-xs">
+            <thead className="bg-white/40 text-brand-muted font-semibold uppercase tracking-wider">
               <tr>
                 <th className="px-6 py-3.5">Product Name</th>
                 <th className="px-6 py-3.5">Category</th>
@@ -83,7 +107,7 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                 <th className="px-6 py-3.5 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-zinc-900 text-zinc-300 font-medium">
+            <tbody className="divide-y divide-brand-border text-brand-muted font-medium">
               {products.map((p) => {
                 const stock = p.inventory?.quantity ?? 0;
                 const draftValue = quantities[p.id];
@@ -94,18 +118,18 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                 return (
                   <tr
                     key={p.id}
-                    className="hover:bg-zinc-900/10 transition-smooth"
+                    className="hover:bg-white/10 transition-smooth"
                   >
-                    <td className="px-6 py-4 font-semibold text-white">
+                    <td className="px-6 py-4 font-semibold text-brand-text">
                       {p.name}
                     </td>
                     <td className="px-6 py-4">
                       {p.category?.name ? (
-                        <span className="text-[9px] font-bold uppercase tracking-wider text-purple-400 bg-purple-950/20 px-2 py-0.5 rounded border border-purple-900/30">
+                        <span className="text-[9px] font-bold uppercase tracking-wider text-brand-primary bg-brand-primary/10 px-2 py-0.5 rounded border border-brand-primary/20">
                           {p.category.name}
                         </span>
                       ) : (
-                        <span className="text-[9px] text-zinc-650 uppercase">
+                        <span className="text-[9px] text-brand-muted uppercase">
                           None
                         </span>
                       )}
@@ -129,7 +153,7 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                         onChange={(e) =>
                           handleInputChange(p.id, e.target.value)
                         }
-                        className="w-24 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs text-zinc-100 placeholder-zinc-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500/30"
+                        className="w-24 px-3 py-1.5 rounded-lg bg-white border border-brand-border text-xs text-brand-text placeholder-brand-muted/70 focus:outline-none focus:border-brand-primary focus:ring-1 focus:ring-brand-primary/50"
                       />
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -139,8 +163,8 @@ const InventoryManager = ({ storeId, products, onRefresh }) => {
                         onClick={() => handleSaveStock(p.id, stock)}
                         className={`px-3 py-1.5 rounded-lg text-xxs font-bold uppercase tracking-wider transition-smooth cursor-pointer ${
                           isModified
-                            ? "bg-purple-600 hover:bg-purple-500 text-white shadow-lg"
-                            : "bg-zinc-800 text-zinc-500 cursor-not-allowed border border-zinc-700/50"
+                            ? "bg-brand-primary hover:bg-brand-primary/90 text-white shadow-lg"
+                            : "bg-white text-brand-muted cursor-not-allowed border border-brand-border"
                         }`}
                       >
                         {savingId === p.id ? "Saving..." : "Save Stock"}
