@@ -31,8 +31,11 @@ import Profile from "./pages/Profile";
 import SuperAdminRequests from "./pages/SuperAdminRequests";
 import PublicStore from "./pages/PublicStore";
 import ProductDetails from "./pages/ProductDetails";
+import Checkout from "./pages/Checkout";
+import TrackOrder from "./pages/TrackOrder";
 import StoreDashboard from "./pages/StoreDashboard";
 import NotFound from "./pages/NotFound";
+import PublicStoreLayout from "./layouts/PublicStoreLayout";
 
 import "./App.css";
 
@@ -51,11 +54,15 @@ function App() {
               <Route path="/register" element={<Register />} />
 
               {/* Public Storefronts */}
-              <Route path="/stores/:storeSlug" element={<PublicStore />} />
-              <Route
-                path="/stores/:storeSlug/products/:productId"
-                element={<ProductDetails />}
-              />
+              <Route path="/stores/:storeSlug" element={<PublicStoreLayout />}>
+                <Route index element={<PublicStore />} />
+                <Route
+                  path="products/:productId"
+                  element={<ProductDetails />}
+                />
+                <Route path="checkout" element={<Checkout />} />
+                <Route path="track-order" element={<TrackOrder />} />
+              </Route>
 
               {/* Protected: Store Owner / Merchant */}
               <Route

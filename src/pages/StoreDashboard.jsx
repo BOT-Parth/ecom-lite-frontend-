@@ -6,9 +6,13 @@ import storeResolver from "../services/storeResolver";
 import ProductManager from "../components/dashboard/ProductManager/ProductManager";
 import CategoryManager from "../components/dashboard/CategoryManager/CategoryManager";
 import InventoryManager from "../components/dashboard/InventoryManager/InventoryManager";
+import OrdersManager from "../components/dashboard/OrdersManager/OrdersManager";
+import { useAuth } from "../hooks/useAuth";
+import StoreSettings from "../components/dashboard/StoreSettings/StoreSettings";
 
 const StoreDashboard = () => {
   const { storeSlug } = useParams();
+  const { user } = useAuth();
   const [store, setStore] = useState(null);
   const [categories, setCategories] = useState([]);
   const [products, setProducts] = useState([]);
@@ -206,6 +210,16 @@ const StoreDashboard = () => {
     );
   }
 
+  const isOwner = user?.authorization?.storeMemberships?.some(
+    (m) => m.storeId === store?.id && m.roleName === "STORE_OWNER"
+  );
+  const hasOrdersRole = user?.authorization?.storeMemberships?.some(
+    (m) => m.storeId === store?.id && ["STORE_OWNER", "STORE_MANAGER", "STORE_STAFF"].includes(m.roleName)
+  );
+  const isSuperAdmin = user?.authorization?.platformRole === "SUPER_ADMIN";
+  const canManageSettings = isOwner || isSuperAdmin;
+  const canManageOrders = hasOrdersRole || isSuperAdmin;
+
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Header Banner */}
@@ -277,6 +291,30 @@ const StoreDashboard = () => {
         >
           Inventory Stock
         </button>
+        {canManageOrders && (
+          <button
+            onClick={() => setActiveTab("orders")}
+            className={`px-5 py-3 text-xs font-semibold border-b-2 transition-smooth cursor-pointer ${
+              activeTab === "orders"
+                ? "border-brand-primary text-brand-text"
+                : "border-transparent text-brand-muted hover:text-brand-text"
+            }`}
+          >
+            Customer Orders
+          </button>
+        )}
+        {canManageSettings && (
+          <button
+            onClick={() => setActiveTab("settings")}
+            className={`px-5 py-3 text-xs font-semibold border-b-2 transition-smooth cursor-pointer ${
+              activeTab === "settings"
+                ? "border-brand-primary text-brand-text"
+                : "border-transparent text-brand-muted hover:text-brand-text"
+            }`}
+          >
+            Store Settings
+          </button>
+        )}
       </div>
 
       {/* Dynamic Tab Content rendering */}
@@ -300,6 +338,15 @@ const StoreDashboard = () => {
           <InventoryManager
             storeId={store.id}
             products={products}
+            onRefresh={fetchStoreData}
+          />
+        )}
+        {activeTab === "orders" && canManageOrders && (
+          <OrdersManager storeId={store.id} />
+        )}
+        {activeTab === "settings" && canManageSettings && (
+          <StoreSettings
+            storeId={store.id}
             onRefresh={fetchStoreData}
           />
         )}

@@ -26,6 +26,7 @@ import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../constants/api";
 import storeResolver from "../services/storeResolver";
+import { useCart } from "../hooks/useCart";
 
 const PublicStore = () => {
   const { storeSlug } = useParams();
@@ -36,6 +37,7 @@ const PublicStore = () => {
   const [loadingStore, setLoadingStore] = useState(true);
   const [loadingProducts, setLoadingProducts] = useState(false);
   const [error, setError] = useState(null);
+  const { cartItems } = useCart();
 
   // 1. Resolve store slug to store details
   useEffect(() => {
@@ -166,9 +168,28 @@ const PublicStore = () => {
               </p>
             </div>
           </div>
-          <span className="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-950/40 text-emerald-300 border border-emerald-800/30 uppercase tracking-wider">
-            Active Storefront
-          </span>
+          <div className="flex flex-col sm:flex-row items-center gap-3 relative z-10">
+            <Link
+              to={`/stores/${storeSlug}/track-order`}
+              className="text-xs font-semibold px-4 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-brand-text border border-brand-border transition-smooth cursor-pointer"
+            >
+              Track Order
+            </Link>
+            {cartItems.length > 0 && (
+              <Link
+                to={`/stores/${storeSlug}/checkout`}
+                className="text-xs font-semibold px-4 py-2 rounded-xl bg-brand-primary text-white shadow-lg hover:shadow-brand-primary/20 transition-smooth flex items-center gap-2 cursor-pointer"
+              >
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                Checkout ({cartItems.length})
+              </Link>
+            )}
+            <span className="self-start sm:self-auto text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-950/40 text-emerald-300 border border-emerald-800/30 uppercase tracking-wider">
+              Active Storefront
+            </span>
+          </div>
         </div>
         {store.description && (
           <p className="text-sm text-brand-muted mt-6 max-w-2xl leading-relaxed border-t border-brand-border pt-4">

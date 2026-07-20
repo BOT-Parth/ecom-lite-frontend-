@@ -24,6 +24,8 @@ import { useParams, Link } from "react-router-dom";
 import api from "../services/api";
 import { API_ENDPOINTS } from "../constants/api";
 import storeResolver from "../services/storeResolver";
+import { useCart } from "../hooks/useCart";
+import { useToast } from "../hooks/useToast";
 
 const ProductDetails = () => {
   const { storeSlug, productId } = useParams();
@@ -31,6 +33,9 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const { addToCart } = useCart();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const loadProductData = async () => {
@@ -93,6 +98,16 @@ const ProductDetails = () => {
   }
 
   const stockCount = product.inventory?.quantity ?? 0;
+
+  const handleAddToCart = () => {
+    if (quantity > stockCount) {
+      showToast("Cannot add more than available stock", "error");
+      return;
+    }
+    addToCart(product, quantity);
+    showToast(`Added ${quantity} ${product.name} to cart`, "success");
+    setQuantity(1);
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -193,6 +208,38 @@ const ProductDetails = () => {
                 {product.description ||
                   "No description provided for this product."}
               </p>
+            </div>
+
+            {/* Add to Cart Section */}
+            <div className="pt-6 border-t border-brand-border">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center bg-brand-surface border border-brand-border rounded-xl">
+                  <button
+                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                    disabled={stockCount === 0 || quantity <= 1}
+                    className="px-4 py-2 text-brand-muted hover:text-brand-text disabled:opacity-50 transition-smooth"
+                  >
+                    -
+                  </button>
+                  <span className="w-8 text-center text-sm font-bold text-brand-text">
+                    {quantity}
+                  </span>
+                  <button
+                    onClick={() => setQuantity((q) => Math.min(stockCount, q + 1))}
+                    disabled={stockCount === 0 || quantity >= stockCount}
+                    className="px-4 py-2 text-brand-muted hover:text-brand-text disabled:opacity-50 transition-smooth"
+                  >
+                    +
+                  </button>
+                </div>
+                <button
+                  onClick={handleAddToCart}
+                  disabled={stockCount === 0}
+                  className="flex-1 py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-bold rounded-xl shadow-lg hover:shadow-brand-primary/20 transition-smooth disabled:bg-brand-surface disabled:text-brand-muted disabled:border disabled:border-brand-border disabled:shadow-none cursor-pointer"
+                >
+                  {stockCount > 0 ? "Add to Cart" : "Out of Stock"}
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -20,6 +20,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import api from "../services/api";
+import { API_ENDPOINTS } from "../constants/api";
 
 const BrowseStores = () => {
   const [stores, setStores] = useState([]);
@@ -29,7 +30,7 @@ const BrowseStores = () => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        const res = await api.get("/stores/platform");
+        const res = await api.get(API_ENDPOINTS.STORES.PLATFORM_LIST);
         setStores(res.data?.stores || []);
       } catch (err) {
         setError(err.message || "Failed to retrieve platform stores directory");

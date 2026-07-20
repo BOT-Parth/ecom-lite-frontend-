@@ -25,7 +25,7 @@ export const API_ENDPOINTS = {
   STORES: {
     PUBLIC_LIST: "/stores",
     MY_LIST: "/stores/my",
-    DETAIL: (storeId) => `/stores/${storeId}`,
+    PLATFORM_LIST: "/stores/platform",
     SETTINGS: (storeId) => `/stores/${storeId}/settings`,
   },
   STORE_REQUESTS: {
@@ -46,5 +46,12 @@ export const API_ENDPOINTS = {
   INVENTORY: {
     DETAIL_UPDATE: (storeId, productId) =>
       `/stores/${storeId}/products/${productId}/inventory`,
+  },
+  ORDERS: {
+    CREATE: (storeId) => `/stores/${storeId}/orders`,
+    TRACK: (storeId) => `/stores/${storeId}/orders/track`,
+    LIST: (storeId) => `/stores/${storeId}/orders`,
+    DETAIL: (storeId, id) => `/stores/${storeId}/orders/${id}`,
+    UPDATE_STATUS: (storeId, id) => `/stores/${storeId}/orders/${id}/status`,
   },
 };
